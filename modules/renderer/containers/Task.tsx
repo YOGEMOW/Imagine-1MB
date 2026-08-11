@@ -9,10 +9,12 @@ import {
 } from '../../common/types'
 import * as apis from '../apis'
 import TaskView, { ITaskProps, ITaskDispatchProps, ITaskOwnProps } from '../components/TaskView'
+import { CompressionMode } from '../components/CompressionModeSelect'
 
 export default connect<ITaskProps, ITaskDispatchProps, ITaskOwnProps, IState>(
   (state, ownProps) => ({
     task: state.tasks[ownProps.index],
+    mode: state.globals.compressionMode,
   }),
   (dispatch) => ({
     onRemove(task: ITaskItem) {
@@ -23,6 +25,9 @@ export default connect<ITaskProps, ITaskDispatchProps, ITaskOwnProps, IState>(
     },
     onExportChange(id: string, ext: SupportedExt) {
       dispatch(actions.taskUpdateExport(id, ext))
+    },
+    onModeChange(mode: CompressionMode) {
+      dispatch(actions.compressionModeUpdate(mode))
     },
     onClick(task: ITaskItem) {
       dispatch(actions.taskDetail(task.id))

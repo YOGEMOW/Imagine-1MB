@@ -3,6 +3,7 @@ import classnames from 'classnames'
 import Popper from './Popper'
 import Icon from './Icon'
 import ImageOptions from './ImageOptions'
+import CompressionModeSelect, { CompressionMode } from './CompressionModeSelect'
 import SizeReduce from './SizeReduce'
 import TargetTypeSelect from './TargetTypeSelect'
 import {
@@ -11,7 +12,6 @@ import {
   IOptimizeOptions,
   SaveType,
   SupportedExt,
-  Empty,
 } from '../../common/types'
 import __ from '../../locales'
 
@@ -19,6 +19,7 @@ import './TaskView.less'
 
 export interface ITaskProps {
   task: ITaskItem
+  mode: CompressionMode
 }
 
 export interface ITaskOwnProps {
@@ -31,9 +32,10 @@ export interface ITaskDispatchProps {
   onSave(task: ITaskItem, type: SaveType): void
   onOptionsChange(id: string, options: IOptimizeOptions): void
   onExportChange(id: string, ext: SupportedExt): void
+  onModeChange(mode: CompressionMode): void
 }
 
-class TaskView extends PureComponent<ITaskProps & ITaskDispatchProps, Empty> {
+class TaskView extends PureComponent<ITaskProps & ITaskDispatchProps> {
   handleClear = (e: MouseEvent<HTMLElement>) => {
     this.stopEvent(e)
 
@@ -149,10 +151,16 @@ class TaskView extends PureComponent<ITaskProps & ITaskDispatchProps, Empty> {
           </div>
         </div>
         <div className="image-profile">
+          <div className="task-mode-row">
+            <CompressionModeSelect
+              value={this.props.mode}
+              onChange={this.props.onModeChange}
+            />
+          </div>
           <ImageOptions
-            ext={exportExt}
             options={options}
             precision={false}
+            mode={this.props.mode}
             onChange={this.handleOptionsChange}
           />
           <div>

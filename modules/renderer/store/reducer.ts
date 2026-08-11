@@ -11,6 +11,7 @@ import {
   IState,
   IGlobals,
   IDefaultOptions,
+  DEFAULT_MAX_SIZE,
 } from '../../common/types'
 import {
   ACTIONS,
@@ -23,19 +24,27 @@ type Tasks = ITaskItem[]
 export const createOptimizeOptions = (ext: SupportedExt) => {
   const optimizeOptions: IOptimizeOptions = {
     exportExt: ext,
+    maxSize: DEFAULT_MAX_SIZE,
+    lossless: false,
+    preserveMetadata: true,
   }
 
   switch (ext) {
     case SupportedExt.jpg:
-    case SupportedExt.webp:
       Object.assign(optimizeOptions, {
         quality: 80,
       })
       break
 
+    case SupportedExt.webp:
+      Object.assign(optimizeOptions, {
+        quality: 60,
+      })
+      break
+
     case SupportedExt.png:
       Object.assign(optimizeOptions, {
-        color: 128,
+        quality: 30,
       })
       break
 
@@ -44,6 +53,21 @@ export const createOptimizeOptions = (ext: SupportedExt) => {
 
   return optimizeOptions
 }
+
+const normalizeDefaultOptions = (saved?: IDefaultOptions): IDefaultOptions => ({
+  png: {
+    ...createOptimizeOptions(SupportedExt.png),
+    ...(saved && saved.png),
+  },
+  jpg: {
+    ...createOptimizeOptions(SupportedExt.jpg),
+    ...(saved && saved.jpg),
+  },
+  webp: {
+    ...createOptimizeOptions(SupportedExt.webp),
+    ...(saved && saved.webp),
+  },
+})
 
 const savedOptions = storage.getOptions()
 
@@ -182,6 +206,12 @@ export default handleActions<IState, any>({
     }))
   },
 
+  [ACTIONS.COMPRESSION_MODE_UPDATE](state, action: Action<'quality' | 'size'>) {
+    return updateGlobalsPartial(state, {
+      compressionMode: action.payload,
+    })
+  },
+
   [ACTIONS.TASK_SELECTED_ID_UPDATE](state, action: Action<string>) {
     return updateGlobalsPartial(state, {
       activeId: action.payload,
@@ -204,7 +234,10 @@ export default handleActions<IState, any>({
     const { ext, options } = action.payload
     const defaultOptions = {
       ...state.globals.defaultOptions,
-      [ext]: options,
+      [ext]: {
+        ...createOptimizeOptions(ext),
+        ...options,
+      },
     }
 
     /**
@@ -220,11 +253,7 @@ export default handleActions<IState, any>({
   tasks: [],
   globals: {
     optionsVisible: false,
-    defaultOptions: {
-      png: createOptimizeOptions(SupportedExt.png),
-      jpg: createOptimizeOptions(SupportedExt.jpg),
-      webp: createOptimizeOptions(SupportedExt.webp),
-    },
-    ...savedOptions,
+    compressionMode: 'quality',
+    defaultOptions: normalizeDefaultOptions(savedOptions?.defaultOptions),
   },
 }) as Reducer<IState, any>

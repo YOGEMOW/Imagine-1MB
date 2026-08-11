@@ -27,6 +27,22 @@ const image2: IImageFile = {
   originalName: 'file.jpg',
 }
 
+const defaultPngOptions = {
+  quality: 30,
+  exportExt: SupportedExt.png,
+  maxSize: 1048576,
+  lossless: false,
+  preserveMetadata: true,
+}
+
+const defaultJpgOptions = {
+  quality: 80,
+  exportExt: SupportedExt.jpg,
+  maxSize: 1048576,
+  lossless: false,
+  preserveMetadata: true,
+}
+
 test('initial state', () => {
   const store = createStore()
 
@@ -43,19 +59,13 @@ test('task add', () => {
     {
       id: image1.id,
       image: image1,
-      options: {
-        color: 128,
-        exportExt: SupportedExt.png,
-      },
+      options: defaultPngOptions,
       status: TaskStatus.PENDING,
     },
     {
       id: image2.id,
       image: image2,
-      options: {
-        quality: 80,
-        exportExt: SupportedExt.jpg,
-      },
+      options: defaultJpgOptions,
       status: TaskStatus.PENDING,
     },
   ])
@@ -71,10 +81,7 @@ test('task delete', () => {
     {
       id: image1.id,
       image: image1,
-      options: {
-        color: 128,
-        exportExt: SupportedExt.png,
-      },
+      options: defaultPngOptions,
       status: TaskStatus.PENDING,
     },
   ])
@@ -97,10 +104,7 @@ test('task update options', () => {
     {
       id: image1.id,
       image: image1,
-      options: {
-        color: 128,
-        exportExt: SupportedExt.png,
-      },
+      options: defaultPngOptions,
       status: TaskStatus.PENDING,
     },
     {
@@ -126,19 +130,13 @@ test('task start', () => {
     {
       id: image1.id,
       image: image1,
-      options: {
-        color: 128,
-        exportExt: SupportedExt.png,
-      },
+      options: defaultPngOptions,
       status: TaskStatus.PENDING,
     },
     {
       id: image2.id,
       image: image2,
-      options: {
-        quality: 80,
-        exportExt: SupportedExt.jpg,
-      },
+      options: defaultJpgOptions,
       status: TaskStatus.PROCESSING,
     },
   ])
@@ -161,19 +159,13 @@ test('task success', () => {
     {
       id: image1.id,
       image: image1,
-      options: {
-        color: 128,
-        exportExt: SupportedExt.png,
-      },
+      options: defaultPngOptions,
       status: TaskStatus.PENDING,
     },
     {
       id: image2.id,
       image: image2,
-      options: {
-        quality: 80,
-        exportExt: SupportedExt.jpg,
-      },
+      options: defaultJpgOptions,
       status: TaskStatus.DONE,
       optimized: {
         id: '03',
@@ -197,19 +189,13 @@ test('task fail', () => {
     {
       id: image1.id,
       image: image1,
-      options: {
-        color: 128,
-        exportExt: SupportedExt.png,
-      },
+      options: defaultPngOptions,
       status: TaskStatus.PENDING,
     },
     {
       id: image2.id,
       image: image2,
-      options: {
-        quality: 80,
-        exportExt: SupportedExt.jpg,
-      },
+      options: defaultJpgOptions,
       status: TaskStatus.FAIL,
     },
   ])
@@ -218,6 +204,8 @@ test('task fail', () => {
 test('globals', () => {
   const store = createStore()
 
+  expect(store.getState().globals.compressionMode).toBe('quality')
+
   store.dispatch(actions.taskDetail('detailId'))
 
   expect(store.getState().globals.activeId).toBe('detailId')
@@ -225,6 +213,37 @@ test('globals', () => {
   store.dispatch(actions.taskDetail(null))
 
   expect(store.getState().globals.activeId).toBe(null)
+})
+
+test('compression mode update', () => {
+  const store = createStore()
+
+  store.dispatch(actions.compressionModeUpdate('size'))
+
+  expect(store.getState().globals.compressionMode).toBe('size')
+})
+
+test('quality and size options do not overwrite each other', () => {
+  const store = createStore()
+
+  store.dispatch(actions.defaultOptions({
+    ext: SupportedExt.png,
+    options: {
+      ...store.getState().globals.defaultOptions.png,
+      quality: 50,
+    },
+  }))
+
+  store.dispatch(actions.defaultOptions({
+    ext: SupportedExt.png,
+    options: {
+      ...store.getState().globals.defaultOptions.png,
+      maxSize: 2 * 1024 * 1024,
+    },
+  }))
+
+  expect(store.getState().globals.defaultOptions.png.quality).toBe(50)
+  expect(store.getState().globals.defaultOptions.png.maxSize).toBe(2 * 1024 * 1024)
 })
 
 test('set globalOptions', () => {
@@ -249,17 +268,27 @@ test('set globalOptions', () => {
   expect(store.getState().globals.defaultOptions).toEqual({
     png: {
       color: 8,
+      quality: 30,
       exportExt: SupportedExt.png,
+      maxSize: 1048576,
+      lossless: false,
+      preserveMetadata: true,
     },
 
     jpg: {
       quality: 60,
       exportExt: SupportedExt.jpg,
+      maxSize: 1048576,
+      lossless: false,
+      preserveMetadata: true,
     },
 
     webp: {
-      quality: 80,
+      quality: 60,
       exportExt: SupportedExt.webp,
+      maxSize: 1048576,
+      lossless: false,
+      preserveMetadata: true,
     },
   })
 
@@ -271,7 +300,11 @@ test('set globalOptions', () => {
       image: image1,
       options: {
         color: 8,
+        quality: 30,
         exportExt: SupportedExt.png,
+        maxSize: 1048576,
+        lossless: false,
+        preserveMetadata: true,
       },
       status: TaskStatus.PENDING,
     },
@@ -281,8 +314,59 @@ test('set globalOptions', () => {
       options: {
         quality: 60,
         exportExt: SupportedExt.jpg,
+        maxSize: 1048576,
+        lossless: false,
+        preserveMetadata: true,
       },
       status: TaskStatus.PENDING,
     },
   ])
+})
+
+test('legacy saved options without new fields are normalized', async () => {
+  localStorage.setItem('options-v3', JSON.stringify({
+    defaultOptions: {
+      png: {
+        color: 64,
+        exportExt: SupportedExt.png,
+      },
+      jpg: {
+        quality: 70,
+        exportExt: SupportedExt.jpg,
+      },
+      webp: {
+        quality: 75,
+        exportExt: SupportedExt.webp,
+      },
+    },
+  }))
+
+  jest.resetModules()
+
+  const { createStore: createStoreReloaded } = await import('../../renderer/store/store')
+  const store = createStoreReloaded()
+  const { defaultOptions } = store.getState().globals
+
+  expect(defaultOptions.png).toEqual({
+    color: 64,
+    quality: 30,
+    exportExt: SupportedExt.png,
+    maxSize: 1048576,
+    lossless: false,
+    preserveMetadata: true,
+  })
+  expect(defaultOptions.jpg).toEqual({
+    quality: 70,
+    exportExt: SupportedExt.jpg,
+    maxSize: 1048576,
+    lossless: false,
+    preserveMetadata: true,
+  })
+  expect(defaultOptions.webp).toEqual({
+    quality: 75,
+    exportExt: SupportedExt.webp,
+    maxSize: 1048576,
+    lossless: false,
+    preserveMetadata: true,
+  })
 })

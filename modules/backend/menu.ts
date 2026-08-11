@@ -29,8 +29,8 @@ class AppMenu extends EventEmitter {
     const { response } = await dialog.showMessageBox({
       type: 'info',
       title: __('about', pkg.name),
-      message: `Imagine v${pkg.version}`,
-      detail: `Created by Meowtec\n${pkg.homepage}`,
+      message: `Imagine-1MB v${pkg.version}`,
+      detail: `${pkg.homepage}`,
       buttons: [__('ok'), __('visit')],
     })
 

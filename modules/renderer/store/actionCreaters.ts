@@ -50,4 +50,6 @@ export default {
   defaultOptions: createAction<IDefaultOptionsPayload>(ACTIONS.DEFAULT_OPTIONS_UPDATE),
 
   optionsApply: createAction(ACTIONS.OPTIONS_APPLY),
+
+  compressionModeUpdate: createAction<'quality' | 'size'>(ACTIONS.COMPRESSION_MODE_UPDATE),
 }

@@ -23,9 +23,13 @@ const getBin = (name: string) => path.resolve(
 export const pngquant = getBin('pngquant')
 export const mozjpeg = getBin('moz-cjpeg')
 export const cwebp = getBin('cwebp')
+export const optipng = getBin('optipng')
+export const jpegtran = getBin('jpegtran')
 
 log.info('binPath', {
   pngquant,
   mozjpeg,
   cwebp,
+  optipng,
+  jpegtran,
 })

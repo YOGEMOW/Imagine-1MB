@@ -47,6 +47,10 @@ export const percent = (rate: number) => fixed((rate * 100), 1)
 
 type Unit = 'B' | 'KB' | 'MB'
 
+export const mbToBytes = (mb: number) => Math.round(mb * 1024 * 1024)
+
+export const bytesToMb = (bytes: number) => bytes / (1024 * 1024)
+
 export const size = (bytes: number): [number, Unit] => {
   let number: number
   let unit: Unit

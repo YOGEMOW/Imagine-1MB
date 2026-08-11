@@ -1,8 +1,8 @@
-# Imagine
+# Imagine-1MB
 
-[![build](https://travis-ci.org/meowtec/Imagine.svg?branch=master)](https://travis-ci.org/meowtec/Imagine)
+[![build](https://travis-ci.org/YOGEMOW/Imagine-1MB.svg?branch=master)](https://travis-ci.org/YOGEMOW/Imagine-1MB)
 
-Imagine is a desktop app for compression of PNG and JPEG, with a modern and friendly UI.
+Imagine-1MB is a desktop app for compression of PNG, JPEG and WebP, with a modern and friendly UI.
 
 Save for web.
 
@@ -10,13 +10,13 @@ Save for web.
 
 For Windows, macOS and Linux, download binaries from:
 
-[https://github.com/meowtec/Imagine/releases](https://github.com/meowtec/Imagine/releases)
+[https://github.com/YOGEMOW/Imagine-1MB/releases](https://github.com/YOGEMOW/Imagine-1MB/releases)
 
- - `Imagine-Setup-x.y.z.exe`      - *Windows*
- - `Imagine-x.y.z.dmg`            - *macOS*
- - `Imagine-0.4.1-x.y.z.AppImage` - *Linux*
+ - `Imagine-1MB-Setup-x.y.z.exe`  - *Windows*
+ - `Imagine-1MB-x.y.z.dmg`        - *macOS*
+ - `Imagine-1MB-x.y.z.AppImage`   - *Linux*
 
-国内用户从 GitHub 下载可能比较慢，可以使用[国内加速](https://github.com/meowtec/Imagine/issues/7)
+国内用户从 GitHub 下载可能比较慢，可以使用[国内加速](https://github.com/YOGEMOW/Imagine-1MB/issues)
 
 ### Install on linux
 
@@ -24,8 +24,8 @@ App for linux is distributed in [AppImage](http://appimage.org/) format.
 Install it with command line:
 
 ```bash
-chmod a+x Imagine-x.y.z-x86_64.AppImage # make executable
-./Imagine-x.y.z-x86_64.AppImage # install and run
+chmod a+x Imagine-1MB-x.y.z-x86_64.AppImage # make executable
+./Imagine-1MB-x.y.z-x86_64.AppImage # install and run
 ```
 
 ## Screenshot
@@ -44,7 +44,7 @@ chmod a+x Imagine-x.y.z-x86_64.AppImage # make executable
 ## Build and Contribute
 
 ```bash
-git clone https://github.com/meowtec/Imagine.git
+git clone https://github.com/YOGEMOW/Imagine-1MB.git
 npm install
 npm run dev
 ```
@@ -53,7 +53,7 @@ A PR with **all checks passed** is welcome.
 
 Before submit a PR, please run `npm run test` and make sure it success on your machine.
 
-Up to now, there are only [5 locales](https://github.com/meowtec/Imagine/tree/dev/modules/locales). To add a new locale, you can either submit a PR, or [create an issue](https://github.com/meowtec/Imagine/issues/new), or just send me an email(found in [my profile](https://github.com/meowtec)).
+Up to now, there are only [5 locales](https://github.com/YOGEMOW/Imagine-1MB/tree/master/modules/locales). To add a new locale, you can either submit a PR, or [create an issue](https://github.com/YOGEMOW/Imagine-1MB/issues/new).
 
 ## Built on
 

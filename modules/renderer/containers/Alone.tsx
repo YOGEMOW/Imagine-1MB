@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react'
 import { connect } from 'react-redux'
 import ImageOptions from '../components/ImageOptions'
+import CompressionModeSelect, { CompressionMode } from '../components/CompressionModeSelect'
 import ImageViewer from '../components/ImageViewer'
 import Modal from '../components/Modal'
 import Icon from '../components/Icon'
@@ -23,12 +24,14 @@ import './Alone.less'
 
 interface IAloneProps {
   task?: ITaskItem
+  mode: CompressionMode
 }
 
 interface IAloneDispatchProps {
   onClose(): void
   onOptionsChange(id: string, options: IOptimizeOptions): void
   onExportChange(id: string, ext: SupportedExt): void
+  onModeChange(mode: CompressionMode): void
 }
 
 const enum ImageStage {
@@ -102,15 +105,19 @@ class Alone extends PureComponent<IAloneProps & IAloneDispatchProps, IAloneState
           : null}
         <SizeReduce task={task} />
         <div className="paper alone-options">
+          <CompressionModeSelect
+            value={this.props.mode}
+            onChange={this.props.onModeChange}
+          />
           <TargetTypeSelect
             sourceExt={image.ext}
             targetExt={exportExt}
             onChange={this.handleExtChange}
           />
           <ImageOptions
-            ext={exportExt}
             options={options}
             precision
+            mode={this.props.mode}
             onChange={this.handleOptionsChange}
           />
         </div>
@@ -152,6 +159,7 @@ class Alone extends PureComponent<IAloneProps & IAloneDispatchProps, IAloneState
 
 export default connect<IAloneProps, IAloneDispatchProps, Record<string, never>, IState>((state) => ({
   task: getActiveTask(state),
+  mode: state.globals.compressionMode,
 }), (dispatch) => ({
   onClose() {
     dispatch(actions.taskDetail(null))
@@ -161,5 +169,8 @@ export default connect<IAloneProps, IAloneDispatchProps, Record<string, never>, 
   },
   onExportChange(id: string, ext: SupportedExt) {
     dispatch(actions.taskUpdateExport(id, ext))
+  },
+  onModeChange(mode: CompressionMode) {
+    dispatch(actions.compressionModeUpdate(mode))
   },
 }))(Alone)

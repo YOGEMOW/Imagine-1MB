@@ -1,12 +1,12 @@
 {
-  "name": "Imagine",
+  "name": "imagine-1mb",
   "private": true,
   "version": "0.7.5",
-  "description": "PNG/JPEG optimization app",
-  "homepage": "https://github.com/meowtec/Imagine",
+  "description": "PNG/JPEG/WebP optimization app - Imagine-1MB",
+  "homepage": "https://github.com/YOGEMOW/Imagine-1MB",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/meowtec/Imagine.git"
+    "url": "git+https://github.com/YOGEMOW/Imagine-1MB.git"
   },
   "main": "./lib/bootstrap.js",
   "scripts": {
@@ -19,12 +19,13 @@
     "release": "npm run build && electron-builder --publish always",
     "test": "tsc && npm run lint && jest"
   },
-  "author": "meowtec<bertonzh@gmail.com>",
+  "author": "YOGEMOW",
   "license": "ISC",
   "devDependencies": {
     "@types/electron-devtools-installer": "~2.2.0",
     "@types/fs-extra": "^9.0.7",
     "@types/jest": "^27.4.0",
+    "@types/node": "18.7.8",
     "@types/lodash": "^4.14.168",
     "@types/pixelmatch": "^5.2.2",
     "@types/react": "^17.0.2",
@@ -90,6 +91,8 @@
     "tslib": "^2.1.0"
   },
   "build": {
+    "productName": "Imagine-1MB",
+    "artifactName": "Imagine-1MB-${version}.${ext}",
     "files": [
       "index.html",
       "lib",
@@ -99,7 +102,7 @@
     "asarUnpack": [
       "bin"
     ],
-    "appId": "com.meowtec.imagine.app",
+    "appId": "com.yogemow.imagine-1mb.app",
     "mac": {
       "category": "public.app-category.graphics-design",
       "target": {

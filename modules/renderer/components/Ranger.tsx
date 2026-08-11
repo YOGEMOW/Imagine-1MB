@@ -9,6 +9,7 @@ interface IRangerProps {
   min: number
   nativeStep: number
   inputReadOnly?: boolean
+  disabled?: boolean
   transformInput(value: number): number
   transformOutput(value: number): number
   onChange(value: number): void
@@ -45,6 +46,7 @@ export default class Ranger extends PureComponent<IRangerProps, any> {
       <div className="ranger">
         <input
           type="range"
+          disabled={this.props.disabled}
           value={nativeValue}
           min={transformInput(min)}
           max={transformInput(max)}
@@ -53,6 +55,7 @@ export default class Ranger extends PureComponent<IRangerProps, any> {
         />
         <input
           type="number"
+          disabled={this.props.disabled}
           readOnly={this.props.inputReadOnly}
           value={value}
           onChange={this.handleNumberInputChange}

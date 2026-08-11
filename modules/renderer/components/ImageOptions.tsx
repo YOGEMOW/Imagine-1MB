@@ -1,26 +1,24 @@
 import React, { PureComponent } from 'react'
-import { SupportedExt, IOptimizeOptions, Empty } from '../../common/types'
-import ColorNumber from './ColorNumber'
+import {
+  IOptimizeOptions,
+  Empty,
+  DEFAULT_MAX_SIZE,
+} from '../../common/types'
+import { CompressionMode } from './CompressionModeSelect'
 import Quality from './Quality'
+import TargetSize from './TargetSize'
 import __ from '../../locales'
 
 import './ImageOptions.less'
 
 interface ImageOptionsProps {
-  ext: SupportedExt
   options: IOptimizeOptions
   precision: boolean
+  mode?: CompressionMode
   onChange(options: IOptimizeOptions): void
 }
 
 export default class ImageOptions extends PureComponent<ImageOptionsProps, Empty> {
-  handleColorChange = (color: number) => {
-    this.props.onChange({
-      ...this.props.options,
-      color,
-    })
-  }
-
   handleQualityChange = (quality: number) => {
     this.props.onChange({
       ...this.props.options,
@@ -28,46 +26,48 @@ export default class ImageOptions extends PureComponent<ImageOptionsProps, Empty
     })
   }
 
-  renderPNG() {
-    return (
-      <div className="image-options">
-        <div>{__('colors')}</div>
-        <ColorNumber
-          value={this.props.options.color || 0}
-          onChange={this.handleColorChange}
-          nativeStep={this.props.precision ? 0.1 : 1}
-        />
-      </div>
-    )
+  handleTargetSizeChange = (maxSize: number) => {
+    this.props.onChange({
+      ...this.props.options,
+      maxSize,
+    })
   }
 
-  renderJPGWebp() {
+  renderQuality() {
+    const { options, precision } = this.props
+    const disabled = !!options.lossless
+
     return (
       <div className="image-options">
-        <div>{__('quality')}</div>
+        <div>{__('image_quality')}</div>
         <Quality
-          value={this.props.options.quality || 0}
+          value={options.quality || 0}
+          disabled={disabled}
           onChange={this.handleQualityChange}
-          nativeStep={this.props.precision ? 0.1 : 1}
+          nativeStep={precision ? 0.1 : 1}
         />
         <span className="percent-symbol">%</span>
       </div>
     )
   }
 
+  renderTargetSize() {
+    return (
+      <div className="image-options target-size-row">
+        <div>{__('image_size')}</div>
+        <TargetSize
+          value={this.props.options.maxSize || DEFAULT_MAX_SIZE}
+          onChange={this.handleTargetSizeChange}
+        />
+      </div>
+    )
+  }
+
   render() {
-    const { ext } = this.props
-
-    switch (ext) {
-      case SupportedExt.jpg:
-      case SupportedExt.webp:
-        return this.renderJPGWebp()
-
-      case SupportedExt.png:
-        return this.renderPNG()
-      default:
+    if (this.props.mode === 'size') {
+      return this.renderTargetSize()
     }
 
-    return null
+    return this.renderQuality()
   }
 }

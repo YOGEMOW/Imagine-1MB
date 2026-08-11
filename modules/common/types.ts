@@ -13,6 +13,8 @@ export const SupportedExtAlias: Record<string, SupportedExt> = {
   jpeg: SupportedExt.jpg,
 }
 
+export const DEFAULT_MAX_SIZE = 1024 * 1024
+
 export const enum TaskStatus {
   PENDING = 'PENDING',
   PROCESSING = 'PROCESSING',
@@ -55,6 +57,21 @@ export interface IImageFile {
 }
 
 export interface IOptimizeOptions {
+  /**
+   * Target maximum file size in bytes. Defaults to 1MB.
+   */
+  maxSize?: number
+
+  /**
+   * Use true lossless compression when the target format supports it.
+   */
+  lossless?: boolean
+
+  /**
+   * Keep metadata (EXIF/ICC/XMP etc.) in the optimized output.
+   */
+  preserveMetadata?: boolean
+
   /**
    * 2~256, for PNG
    */
@@ -99,6 +116,7 @@ export interface IGlobals {
   activeId?: string
   updateInfo?: UpdateInfo
   optionsVisible: boolean
+  compressionMode: 'quality' | 'size'
   defaultOptions: IDefaultOptions
 }
 

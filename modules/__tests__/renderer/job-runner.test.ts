@@ -14,6 +14,19 @@ import {
 } from '../../common/types'
 
 jest.mock('../../renderer/apis/')
+jest.mock('../../bridge/web', () => ({
+  imagineAPI: {
+    logger: {
+      error: jest.fn(),
+    },
+    optimize: jest.fn(async ({ image }: { image: IImageFile }) => {
+      await new Promise((resolve) => {
+        setTimeout(resolve, 100)
+      })
+      return { ...image }
+    }),
+  },
+}))
 
 test('optimize JobRunner', async () => {
   const images = await saveFilesTmp(

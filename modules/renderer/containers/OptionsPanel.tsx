@@ -9,6 +9,7 @@ import {
 import Icon from '../components/Icon'
 import Collapse from '../components/Collapse'
 import ImageOptions from '../components/ImageOptions'
+import CompressionModeSelect, { CompressionMode } from '../components/CompressionModeSelect'
 import TargetTypeSelect from '../components/TargetTypeSelect'
 import actions from '../store/actionCreaters'
 import __ from '../../locales'
@@ -17,10 +18,12 @@ import './OptionsPanel.less'
 
 interface IProps {
   optionsMap: IDefaultOptions
+  mode: CompressionMode
 }
 
 interface IDispatchProps {
   onOptionsChange(ext: SupportedExt, options: IOptimizeOptions): void
+  onModeChange(mode: CompressionMode): void
   onApplyClick(): void
   onClose(): void
 }
@@ -30,6 +33,22 @@ interface IOwnProps {
 }
 
 class OptionsPanel extends PureComponent<IProps & IDispatchProps> {
+  handleGlobalOptionsChange = (patch: Pick<IOptimizeOptions, 'lossless' | 'preserveMetadata'>) => {
+    const { optionsMap, onOptionsChange } = this.props
+    const exts: SupportedExt[] = [
+      SupportedExt.png,
+      SupportedExt.jpg,
+      SupportedExt.webp,
+    ]
+
+    exts.forEach((ext) => {
+      onOptionsChange(ext, {
+        ...optionsMap[ext],
+        ...patch,
+      })
+    })
+  }
+
   onOptionsChanges = (() => {
     const createOptionsChangeHandler = (ext: SupportedExt) => (options: IOptimizeOptions) => {
       const { onOptionsChange } = this.props
@@ -64,6 +83,14 @@ class OptionsPanel extends PureComponent<IProps & IDispatchProps> {
     return (
       <div className="options">
         <div className="options-body">
+          <div className="compression-mode-row">
+            <span>{__('compression_mode')}</span>
+            <CompressionModeSelect
+              value={this.props.mode}
+              onChange={this.props.onModeChange}
+            />
+          </div>
+
           <Collapse title="PNG" initialVisible>
             <div className="collapse-row target-ext-select-row">
               <TargetTypeSelect
@@ -76,7 +103,7 @@ class OptionsPanel extends PureComponent<IProps & IDispatchProps> {
             <div className="collapse-row">
               <ImageOptions
                 precision
-                ext={SupportedExt.png}
+                mode={this.props.mode}
                 options={optionsMap.png}
                 onChange={this.onOptionsChanges.png}
               />
@@ -95,7 +122,7 @@ class OptionsPanel extends PureComponent<IProps & IDispatchProps> {
             <div className="collapse-row">
               <ImageOptions
                 precision
-                ext={SupportedExt.jpg}
+                mode={this.props.mode}
                 options={optionsMap.jpg}
                 onChange={this.onOptionsChanges.jpg}
               />
@@ -106,12 +133,37 @@ class OptionsPanel extends PureComponent<IProps & IDispatchProps> {
             <div className="collapse-row">
               <ImageOptions
                 precision
-                ext={SupportedExt.webp}
+                mode={this.props.mode}
                 options={optionsMap.webp}
                 onChange={this.onOptionsChanges.webp}
               />
             </div>
           </Collapse>
+
+          <div className="global-options-row">
+            <label htmlFor="lossless-option">
+              <input
+                id="lossless-option"
+                type="checkbox"
+                checked={!!optionsMap.png.lossless}
+                onChange={(e) => this.handleGlobalOptionsChange({
+                  lossless: e.target.checked,
+                })}
+              />
+              {__('lossless')}
+            </label>
+            <label htmlFor="preserve-metadata-option">
+              <input
+                id="preserve-metadata-option"
+                type="checkbox"
+                checked={optionsMap.png.preserveMetadata !== false}
+                onChange={(e) => this.handleGlobalOptionsChange({
+                  preserveMetadata: e.target.checked,
+                })}
+              />
+              {__('preserve_metadata')}
+            </label>
+          </div>
         </div>
         <footer className="clearfix">
           <button type="button" onClick={onApplyClick}>
@@ -131,6 +183,7 @@ class OptionsPanel extends PureComponent<IProps & IDispatchProps> {
 export default connect<IProps, IDispatchProps, IOwnProps, IState>(
   (state) => ({
     optionsMap: state.globals.defaultOptions,
+    mode: state.globals.compressionMode,
   }),
 
   (dispatch, ownProps) => ({
@@ -139,6 +192,10 @@ export default connect<IProps, IDispatchProps, IOwnProps, IState>(
         ext,
         options,
       }))
+    },
+
+    onModeChange(mode: CompressionMode) {
+      dispatch(actions.compressionModeUpdate(mode))
     },
 
     onApplyClick() {

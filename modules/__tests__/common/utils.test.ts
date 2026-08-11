@@ -41,6 +41,17 @@ test('fixed', () => {
   expect(_.fixed(1.001, 2)).toBe(1)
 })
 
+test('mbToBytes', () => {
+  expect(_.mbToBytes(1)).toBe(1048576)
+  expect(_.mbToBytes(0.5)).toBe(524288)
+  expect(_.mbToBytes(100)).toBe(104857600)
+})
+
+test('bytesToMb', () => {
+  expect(_.bytesToMb(1048576)).toBe(1)
+  expect(_.bytesToMb(524288)).toBe(0.5)
+})
+
 test('size', () => {
   expect(_.size(100)).toEqual([100, 'B'])
   expect(_.size(999)).toEqual([999, 'B'])

@@ -52,7 +52,7 @@ test('getFilePath', async () => {
     ext: SupportedExt.png,
     originalName: '',
   })
-  expect(size).toMatch(/\/abcd.png$/)
+  expect(path.basename(size)).toBe('abcd.png')
 })
 
 test('saveFilesTmp', async () => {

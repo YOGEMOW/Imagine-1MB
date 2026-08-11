@@ -26,6 +26,18 @@ test('optimize png success', async () => {
   expect(diffResult).toBeLessThan(0.01)
 })
 
+test('optimize png with quality', async () => {
+  const files = await saveFilesTmp([relPath(png)])
+  const file = files[0] as IImageFile
+  const optimized = await optimize(file, {
+    exportExt: SupportedExt.png,
+    quality: 30,
+    preserveMetadata: true,
+  })
+
+  expect(optimized.size).toBeGreaterThan(0)
+})
+
 test('optimize png fail', async () => {
   const image: IImageFile = {
     id: '404',
@@ -57,6 +69,111 @@ test('optimize jpg success', async () => {
   })
 
   expect(diffResult).toBeLessThan(0.1)
+})
+
+test('optimize skips compression when image is already under maxSize', async () => {
+  const files = await saveFilesTmp([relPath(png)])
+  const file = files[0] as IImageFile
+  const optimized = await optimize(file, {
+    exportExt: SupportedExt.png,
+    maxSize: 1024 * 1024,
+  })
+
+  expect(optimized.size).toBe(file.size)
+})
+
+test('optimize jpg reduces to target size', async () => {
+  const files = await saveFilesTmp([relPath(jpg)])
+  const file = files[0] as IImageFile
+  const maxSize = 150 * 1024
+  const optimized = await optimize(file, {
+    exportExt: SupportedExt.jpg,
+    quality: 80,
+    maxSize,
+  })
+
+  expect(optimized.size).toBeLessThanOrEqual(maxSize)
+})
+
+test('optimize keeps smallest result when maxSize cannot be reached', async () => {
+  const files = await saveFilesTmp([relPath(jpg)])
+  const file = files[0] as IImageFile
+  const optimized = await optimize(file, {
+    exportExt: SupportedExt.jpg,
+    quality: 80,
+    maxSize: 1,
+  })
+
+  expect(optimized.size).toBeGreaterThan(0)
+})
+
+test('optimize cache id changes when maxSize changes', async () => {
+  const files = await saveFilesTmp([relPath(png)])
+  const file = files[0] as IImageFile
+  const optimizedA = await optimize(file, {
+    exportExt: SupportedExt.png,
+    maxSize: 1024 * 1024,
+  })
+  const optimizedB = await optimize(file, {
+    exportExt: SupportedExt.png,
+    maxSize: 2 * 1024 * 1024,
+  })
+
+  expect(optimizedA.id).not.toBe(optimizedB.id)
+})
+
+test('optimize png lossless keeps pixels', async () => {
+  const files = await saveFilesTmp([relPath(png)])
+  const file = files[0] as IImageFile
+  const optimized = await optimize(file, {
+    exportExt: SupportedExt.png,
+    lossless: true,
+    preserveMetadata: true,
+  })
+
+  const diffResult = await fullDiff({
+    actualImage: getFilePath(optimized),
+    expectedImage: getFilePath(file),
+  })
+
+  expect(diffResult).toBeLessThan(0.01)
+})
+
+test('optimize jpg lossless keeps pixels', async () => {
+  const files = await saveFilesTmp([relPath(jpg)])
+  const file = files[0] as IImageFile
+  const optimized = await optimize(file, {
+    exportExt: SupportedExt.jpg,
+    lossless: true,
+    preserveMetadata: true,
+  })
+
+  const diffResult = await fullDiff({
+    actualImage: getFilePath(optimized),
+    expectedImage: getFilePath(file),
+  })
+
+  expect(diffResult).toBeLessThan(0.01)
+})
+
+test('optimize lossless does not degrade when maxSize is impossible', async () => {
+  const files = await saveFilesTmp([relPath(jpg)])
+  const file = files[0] as IImageFile
+  const optimized = await optimize(file, {
+    exportExt: SupportedExt.jpg,
+    lossless: true,
+    preserveMetadata: true,
+    maxSize: 1,
+  })
+
+  expect(optimized.size).toBeGreaterThan(0)
+
+  const diffResult = await fullDiff({
+    actualImage: getFilePath(optimized),
+    expectedImage: getFilePath(file),
+  })
+
+  expect(diffResult).toBeLessThan(0.01)
 })
 
 test('optimize jpg fail', async () => {
