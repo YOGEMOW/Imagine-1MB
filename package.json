@@ -1,7 +1,7 @@
 {
   "name": "imagine-1mb",
   "private": true,
-  "version": "0.7.5",
+  "version": "0.7.6",
   "description": "PNG/JPEG/WebP optimization app - Imagine-1MB",
   "homepage": "https://github.com/YOGEMOW/Imagine-1MB",
   "repository": {
