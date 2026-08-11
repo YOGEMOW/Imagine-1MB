@@ -99,12 +99,6 @@
       "dist/web",
       "bin/${platform}/${arch}/**/*"
     ],
-    "extraFiles": [
-      {
-        "from": "scripts/Uninstall Imagine-1MB.exe",
-        "to": "Uninstall.Imagine-1MB.exe"
-      }
-    ],
     "asarUnpack": [
       "bin"
     ],
@@ -157,7 +151,8 @@
     },
     "nsis": {
       "perMachine": true,
-      "allowElevation": false
+      "allowElevation": false,
+      "uninstallerIcon": "build/uninstall-icon.ico"
     },
     "fileAssociations": [
       {
