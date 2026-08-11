@@ -6,6 +6,19 @@ Imagine-1MB is a desktop app for compression of PNG, JPEG and WebP, with a moder
 
 Save for web.
 
+## 中文介绍
+
+Imagine-1MB 是一款专注于图片压缩的桌面应用，支持 PNG、JPEG、WebP 三种格式，界面简洁、操作直观，适合日常批量压缩图片。
+
+### 主要特性
+
+- 支持 PNG、JPEG、WebP 压缩与格式互转；
+- “压缩模式”可将**图片质量**与**图片大小**分开设置；
+- 支持无损压缩（PNG/JPEG/WebP）；
+- 支持保留或剥离 EXIF/ICC/XMP 等元数据；
+- 支持批量处理、拖拽添加图片；
+- 多语言界面（英文、简体中文等）。
+
 ## Install
 
 For Windows, macOS and Linux, download binaries from:
