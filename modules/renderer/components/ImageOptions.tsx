@@ -39,7 +39,7 @@ export default class ImageOptions extends PureComponent<ImageOptionsProps, Empty
 
     return (
       <div className="image-options">
-        <div>{__('image_quality')}</div>
+        <div className="image-options-label">{__('image_quality')}</div>
         <Quality
           value={options.quality || 0}
           disabled={disabled}
