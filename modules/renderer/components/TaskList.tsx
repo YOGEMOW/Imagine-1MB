@@ -20,7 +20,7 @@ export default function TaskList({
 }: ITaskListProps) {
   const [ref, { width, height }] = useMeasure<HTMLDivElement>()
   const columnWidth = 260
-  const rowHeight = columnWidth + 60
+  const rowHeight = columnWidth + 140
   const columnCount = Math.floor((width - LIST_MARGIN * 2) / columnWidth)
   const rowCount = Math.ceil(tasks.length / columnCount)
   const taskCount = tasks.length
