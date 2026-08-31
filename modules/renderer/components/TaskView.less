@@ -68,17 +68,22 @@
     .task-select-row {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 8px 12px;
+      gap: 24px;
+      padding: 8px 20px;
       border-bottom: 1px solid @border-color;
 
       .select-item {
         flex: 1;
         min-width: 0;
+        max-width: 220px;
       }
 
       .select {
         width: 100%;
+
+        select {
+          min-width: 0;
+        }
       }
 
       .select-ext-type {
