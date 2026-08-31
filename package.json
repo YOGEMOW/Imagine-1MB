@@ -1,7 +1,7 @@
 {
   "name": "imagine-1mb",
   "private": true,
-  "version": "0.7.7",
+  "version": "0.7.8",
   "description": "图片压缩桌面应用，支持 PNG、JPEG、WebP，质量/大小分开设置、无损压缩与元数据保留。",
   "homepage": "https://github.com/YOGEMOW/Imagine-1MB",
   "repository": {
