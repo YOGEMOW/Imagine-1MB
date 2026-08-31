@@ -151,10 +151,17 @@ class TaskView extends PureComponent<ITaskProps & ITaskDispatchProps> {
           </div>
         </div>
         <div className="image-profile">
-          <div className="task-mode-row">
+          <div className="task-select-row">
             <CompressionModeSelect
+              className="select-item"
               value={this.props.mode}
               onChange={this.props.onModeChange}
+            />
+            <TargetTypeSelect
+              className="select-item"
+              sourceExt={image.ext}
+              targetExt={exportExt}
+              onChange={this.handleExtChange}
             />
           </div>
           <ImageOptions
@@ -165,11 +172,6 @@ class TaskView extends PureComponent<ITaskProps & ITaskDispatchProps> {
           />
           <div>
             <div className="image-sizes">
-              <TargetTypeSelect
-                sourceExt={image.ext}
-                targetExt={exportExt}
-                onChange={this.handleExtChange}
-              />
               <SizeReduce task={task} />
             </div>
           </div>

@@ -65,10 +65,25 @@
   .image-profile {
     font-size: 12px;
 
-    .task-mode-row {
+    .task-select-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
       padding: 8px 10px;
       border-bottom: 1px solid @border-color;
-      text-align: right;
+
+      .select-item {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .select {
+        width: 100%;
+      }
+
+      .select-ext-type {
+        width: 100%;
+      }
 
       select {
         font-size: inherit;

@@ -105,15 +105,19 @@ class Alone extends PureComponent<IAloneProps & IAloneDispatchProps, IAloneState
           : null}
         <SizeReduce task={task} />
         <div className="paper alone-options">
-          <CompressionModeSelect
-            value={this.props.mode}
-            onChange={this.props.onModeChange}
-          />
-          <TargetTypeSelect
-            sourceExt={image.ext}
-            targetExt={exportExt}
-            onChange={this.handleExtChange}
-          />
+          <div className="select-row">
+            <CompressionModeSelect
+              className="select-item"
+              value={this.props.mode}
+              onChange={this.props.onModeChange}
+            />
+            <TargetTypeSelect
+              className="select-item"
+              sourceExt={image.ext}
+              targetExt={exportExt}
+              onChange={this.handleExtChange}
+            />
+          </div>
           <ImageOptions
             options={options}
             precision
