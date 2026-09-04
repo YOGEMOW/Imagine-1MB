@@ -15,6 +15,8 @@ export const SupportedExtAlias: Record<string, SupportedExt> = {
 
 export const DEFAULT_MAX_SIZE = 1024 * 1024
 
+export type CompressionMode = 'quality' | 'size'
+
 export const enum TaskStatus {
   PENDING = 'PENDING',
   PROCESSING = 'PROCESSING',
@@ -116,13 +118,14 @@ export interface IGlobals {
   activeId?: string
   updateInfo?: UpdateInfo
   optionsVisible: boolean
-  compressionMode: 'quality' | 'size'
+  compressionMode: CompressionMode
   defaultOptions: IDefaultOptions
 }
 
 export interface IState {
   tasks: ITaskItem[]
   globals: IGlobals
+  taskModes: Record<string, CompressionMode>
 }
 
 export type AsyncCall<Payload, Response> = (payload: Payload) => Promise<Response>

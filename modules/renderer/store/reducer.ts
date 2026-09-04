@@ -11,6 +11,7 @@ import {
   IState,
   IGlobals,
   IDefaultOptions,
+  CompressionMode,
   DEFAULT_MAX_SIZE,
 } from '../../common/types'
 import {
@@ -212,6 +213,18 @@ export default handleActions<IState, any>({
     })
   },
 
+  [ACTIONS.TASK_UPDATE_MODE](state, action: Action<{ id: string, mode: CompressionMode }>) {
+    const { id, mode } = action.payload
+
+    return {
+      ...state,
+      taskModes: {
+        ...state.taskModes,
+        [id]: mode,
+      },
+    }
+  },
+
   [ACTIONS.TASK_SELECTED_ID_UPDATE](state, action: Action<string>) {
     return updateGlobalsPartial(state, {
       activeId: action.payload,
@@ -251,6 +264,7 @@ export default handleActions<IState, any>({
   },
 }, {
   tasks: [],
+  taskModes: {},
   globals: {
     optionsVisible: false,
     compressionMode: 'quality',

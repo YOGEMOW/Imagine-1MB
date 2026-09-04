@@ -32,7 +32,7 @@ export interface ITaskDispatchProps {
   onSave(task: ITaskItem, type: SaveType): void
   onOptionsChange(id: string, options: IOptimizeOptions): void
   onExportChange(id: string, ext: SupportedExt): void
-  onModeChange(mode: CompressionMode): void
+  onModeChange(id: string, mode: CompressionMode): void
 }
 
 class TaskView extends PureComponent<ITaskProps & ITaskDispatchProps> {
@@ -60,6 +60,11 @@ class TaskView extends PureComponent<ITaskProps & ITaskDispatchProps> {
   handleExtChange = (ext: SupportedExt) => {
     const { task, onExportChange } = this.props
     onExportChange(task.id, ext)
+  }
+
+  handleModeChange = (mode: CompressionMode) => {
+    const { task, onModeChange } = this.props
+    onModeChange(task.id, mode)
   }
 
   handleSave = (e: MouseEvent<Element>, type: SaveType) => {
@@ -155,7 +160,7 @@ class TaskView extends PureComponent<ITaskProps & ITaskDispatchProps> {
             <CompressionModeSelect
               className="select-item"
               value={this.props.mode}
-              onChange={this.props.onModeChange}
+              onChange={this.handleModeChange}
             />
             <TargetTypeSelect
               className="select-item"

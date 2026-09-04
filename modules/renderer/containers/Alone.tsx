@@ -31,7 +31,7 @@ interface IAloneDispatchProps {
   onClose(): void
   onOptionsChange(id: string, options: IOptimizeOptions): void
   onExportChange(id: string, ext: SupportedExt): void
-  onModeChange(mode: CompressionMode): void
+  onModeChange(id: string, mode: CompressionMode): void
 }
 
 const enum ImageStage {
@@ -109,7 +109,7 @@ class Alone extends PureComponent<IAloneProps & IAloneDispatchProps, IAloneState
             <CompressionModeSelect
               className="select-item"
               value={this.props.mode}
-              onChange={this.props.onModeChange}
+              onChange={(mode) => this.props.onModeChange(task.id, mode)}
             />
             <TargetTypeSelect
               className="select-item"
@@ -161,10 +161,15 @@ class Alone extends PureComponent<IAloneProps & IAloneDispatchProps, IAloneState
   }
 }
 
-export default connect<IAloneProps, IAloneDispatchProps, Record<string, never>, IState>((state) => ({
-  task: getActiveTask(state),
-  mode: state.globals.compressionMode,
-}), (dispatch) => ({
+export default connect<IAloneProps, IAloneDispatchProps, Record<string, never>, IState>((state) => {
+  const task = getActiveTask(state)
+  return {
+    task,
+    mode: task
+      ? state.taskModes[task.id] || state.globals.compressionMode
+      : state.globals.compressionMode,
+  }
+}, (dispatch) => ({
   onClose() {
     dispatch(actions.taskDetail(null))
   },
@@ -174,7 +179,7 @@ export default connect<IAloneProps, IAloneDispatchProps, Record<string, never>, 
   onExportChange(id: string, ext: SupportedExt) {
     dispatch(actions.taskUpdateExport(id, ext))
   },
-  onModeChange(mode: CompressionMode) {
-    dispatch(actions.compressionModeUpdate(mode))
+  onModeChange(id: string, mode: CompressionMode) {
+    dispatch(actions.taskUpdateMode(id, mode))
   },
 }))(Alone)

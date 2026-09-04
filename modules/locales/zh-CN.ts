@@ -16,7 +16,7 @@ export default {
   colors: '色彩',
   quality: '质量',
   compression_mode: '压缩模式',
-  image_quality: '图片\n质量',
+  image_quality: '图片质量',
   image_size: '图片大小',
   lossless: '无损压缩',
   preserve_metadata: '保留元数据',

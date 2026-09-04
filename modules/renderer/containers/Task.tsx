@@ -12,10 +12,13 @@ import TaskView, { ITaskProps, ITaskDispatchProps, ITaskOwnProps } from '../comp
 import { CompressionMode } from '../components/CompressionModeSelect'
 
 export default connect<ITaskProps, ITaskDispatchProps, ITaskOwnProps, IState>(
-  (state, ownProps) => ({
-    task: state.tasks[ownProps.index],
-    mode: state.globals.compressionMode,
-  }),
+  (state, ownProps) => {
+    const task = state.tasks[ownProps.index]
+    return {
+      task,
+      mode: task ? state.taskModes[task.id] || state.globals.compressionMode : state.globals.compressionMode,
+    }
+  },
   (dispatch) => ({
     onRemove(task: ITaskItem) {
       dispatch(actions.taskDelete([task.id]))
@@ -26,8 +29,8 @@ export default connect<ITaskProps, ITaskDispatchProps, ITaskOwnProps, IState>(
     onExportChange(id: string, ext: SupportedExt) {
       dispatch(actions.taskUpdateExport(id, ext))
     },
-    onModeChange(mode: CompressionMode) {
-      dispatch(actions.compressionModeUpdate(mode))
+    onModeChange(id: string, mode: CompressionMode) {
+      dispatch(actions.taskUpdateMode(id, mode))
     },
     onClick(task: ITaskItem) {
       dispatch(actions.taskDetail(task.id))

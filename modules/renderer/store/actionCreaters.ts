@@ -7,6 +7,7 @@ import {
   IImageFile,
   IOptimizeOptions,
   IUpdateInfo,
+  CompressionMode,
   SupportedExt,
 } from '../../common/types'
 
@@ -52,4 +53,12 @@ export default {
   optionsApply: createAction(ACTIONS.OPTIONS_APPLY),
 
   compressionModeUpdate: createAction<'quality' | 'size'>(ACTIONS.COMPRESSION_MODE_UPDATE),
+
+  taskUpdateMode: createAction<{
+    id: string
+    mode: CompressionMode
+  }, string, CompressionMode>(
+    ACTIONS.TASK_UPDATE_MODE,
+    (id, mode) => ({ id, mode }),
+  ),
 }
