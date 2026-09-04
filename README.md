@@ -16,8 +16,8 @@ Imagine-1MB 是一款基于 Electron 的图片压缩桌面应用，支持 PNG、
 
 最新版本请前往 [GitHub Releases](https://github.com/YOGEMOW/Imagine-1MB/releases) 下载。
 
-- `Imagine-1MB-0.7.8.exe`：便携版，无需安装，解压后直接运行；
-- `Imagine-1MB-Setup-0.7.8.exe`：Windows 安装版；
+- `Imagine-1MB-0.7.9.exe`：便携版，无需安装，解压后直接运行；
+- `Imagine-1MB-Setup-0.7.9.exe`：Windows 安装版；
 - macOS / Linux 版本：请在 Releases 页面选择对应平台安装包。
 
 国内用户从 GitHub 下载较慢时，可以使用 [GitHub 加速](https://github.com/YOGEMOW/Imagine-1MB/issues)。
